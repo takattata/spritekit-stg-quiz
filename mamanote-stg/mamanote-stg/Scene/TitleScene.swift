@@ -14,6 +14,7 @@ class TitleScene: SKScene {
 
     override func didMove(to view: SKView) {
         backgroundColor = .white
+
         let babyTextures = [SKTexture(imageNamed: ImageConstants.babyClose), SKTexture(imageNamed: ImageConstants.babyOpen)]
         let babyNode = SKSpriteNode(texture: babyTextures.first)
         babyNode.position = CGPoint(x: frame.midX, y: frame.midY*1.2)
@@ -29,10 +30,9 @@ class TitleScene: SKScene {
     }
 
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        if let scene = SKScene(fileNamed: "GameScene") {
-            scene.scaleMode = .aspectFill
-            view?.presentScene(scene)
-        }
+        let scene = GameScene(size: frame.size)
+        scene.scaleMode = .aspectFill
+        view?.presentScene(scene)
     }
 
     override func update(_ currentTime: TimeInterval) {
