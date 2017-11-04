@@ -12,6 +12,7 @@ struct ImageConstants {
     static let babyClose = "baby_close"
     static let babyOpen = "baby_open"
     static let heart = "heart"
+    static let myCharacter = "heart"
 
     static let babyCount = 5
     static let baby = { (id: Int) -> String in

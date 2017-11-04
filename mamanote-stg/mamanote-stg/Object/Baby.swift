@@ -7,11 +7,11 @@
 //
 
 import SpriteKit
-import UIKit
 
-class Baby: SKSpriteNode {
+class Baby {
     private let MAX_HP = 200
 
+    private(set) var node: SKSpriteNode?
     private var textures: [SKTexture] = []
     private var hp = 0
 
@@ -19,8 +19,9 @@ class Baby: SKSpriteNode {
         ImageConstants.babies.forEach { imageName in
             textures.append(SKTexture(imageNamed: imageName))
         }
-        texture = textures.first
-        position = CGPoint(x: x, y: y)
+        node = SKSpriteNode(texture: textures.first)
+        node?.setScale(0.5)
+        node?.position = CGPoint(x: x, y: y)
     }
 
     // RETURN: clear?.
@@ -33,7 +34,7 @@ class Baby: SKSpriteNode {
 
         let status = babyStatus()
         if preStatus != status {
-            texture = textures[status]
+            node?.texture = textures[status]
         }
         return false
     }
