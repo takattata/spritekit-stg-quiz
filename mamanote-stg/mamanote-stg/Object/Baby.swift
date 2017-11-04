@@ -11,17 +11,24 @@ import SpriteKit
 class Baby {
     private let MAX_HP = 200
 
-    private(set) var node: SKSpriteNode?
+    private(set) var node: SKSpriteNode
     private var textures: [SKTexture] = []
     private var hp = 0
 
-    func configure(x: CGFloat, y: CGFloat) {
+    init(x: CGFloat, y: CGFloat) {
+        ///FIXME: ...
+        node = SKSpriteNode(imageNamed: ImageConstants.baby(0))
         ImageConstants.babies.forEach { imageName in
             textures.append(SKTexture(imageNamed: imageName))
         }
-        node = SKSpriteNode(texture: textures.first)
-        node?.setScale(0.5)
-        node?.position = CGPoint(x: x, y: y)
+        node.setScale(0.5)
+        node.position = CGPoint(x: x, y: y)
+
+        node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
+        node.physicsBody?.isDynamic = true
+        node.physicsBody?.categoryBitMask = PhysicsCategory.Baby
+        node.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
+        node.physicsBody?.collisionBitMask = PhysicsCategory.None
     }
 
     // RETURN: clear?.
@@ -34,7 +41,7 @@ class Baby {
 
         let status = babyStatus()
         if preStatus != status {
-            node?.texture = textures[status]
+            node.texture = textures[status]
         }
         return false
     }
