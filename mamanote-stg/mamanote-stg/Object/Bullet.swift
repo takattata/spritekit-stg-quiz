@@ -9,10 +9,13 @@
 import SpriteKit
 
 class Bullet {
+    static let NAME = String(describing: Bullet.self)
+
     private(set) var node: SKSpriteNode
 
     init(at position: CGPoint, maxY: CGFloat) {
         node = SKSpriteNode(imageNamed: ImageConstants.heart)
+        node.name = Bullet.NAME
         node.position = position
         let actionMove = SKAction.move(to: CGPoint(x: position.x, y: position.y + maxY), duration: 4.0)
         let actionMoveDone = SKAction.removeFromParent()

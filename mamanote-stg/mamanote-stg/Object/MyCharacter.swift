@@ -9,12 +9,14 @@
 import SpriteKit
 
 class MyCharacter {
+    static let NAME = String(describing: MyCharacter.self)
     private let vx = 8.0
 
     private(set) var node: SKSpriteNode
 
     init(x: CGFloat, y: CGFloat) {
         node = SKSpriteNode(imageNamed: ImageConstants.myCharacter)
+        node.name = MyCharacter.NAME
         node.position = CGPoint(x: x, y: y)
     }
 

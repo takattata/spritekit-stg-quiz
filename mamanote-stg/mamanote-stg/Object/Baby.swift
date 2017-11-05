@@ -9,6 +9,7 @@
 import SpriteKit
 
 class Baby {
+    static let NAME = String(describing: Baby.self)
     private let MAX_HP = 200
 
     private(set) var node: SKSpriteNode
@@ -18,6 +19,7 @@ class Baby {
     init(x: CGFloat, y: CGFloat) {
         ///FIXME: ...
         node = SKSpriteNode(imageNamed: ImageConstants.baby(0))
+        node.name = Baby.NAME
         ImageConstants.babies.forEach { imageName in
             textures.append(SKTexture(imageNamed: imageName))
         }

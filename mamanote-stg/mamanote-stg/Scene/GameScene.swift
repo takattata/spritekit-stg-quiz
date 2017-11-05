@@ -65,6 +65,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 attackLimitCounter = 0
             }
         }
+//
+//        let enemies = findNodes(with: Enemy.NAME)
+//        enemies?.forEach { enemy in
+//            if let enemy = enemy as?
+//        }
     }
 
     func didBegin(_ contact: SKPhysicsContact) {
