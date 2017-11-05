@@ -20,4 +20,13 @@ extension CGPoint {
         left.x = left.x+right.x
         left.y = left.y+right.y
     }
+
+    static func random(min: CGPoint, max: CGPoint) -> CGPoint {
+        let x = CGFloat.random(min: min.x, max: max.x)
+        let y = CGFloat.random(min: min.y, max: max.y)
+        return CGPoint(x: x, y: y)
+    }
+    static func random(at area: CGSize) -> CGPoint {
+        return random(min: CGPoint(x: 0, y: 0), max: CGPoint(x: area.width, y: area.height))
+    }
 }

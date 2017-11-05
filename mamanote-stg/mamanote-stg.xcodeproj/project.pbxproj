@@ -23,6 +23,7 @@
 		3B34144F1FAC0EA500584759 /* TitleScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B34144E1FAC0EA500584759 /* TitleScene.swift */; };
 		3B69D8A31FAE867E003FC2F3 /* CGPoint+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69D8A21FAE867E003FC2F3 /* CGPoint+Extension.swift */; };
 		3B69D8A51FAED3D4003FC2F3 /* SKNode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69D8A41FAED3D4003FC2F3 /* SKNode+Extension.swift */; };
+		3B69D8A71FAEEB3F003FC2F3 /* CGFloat+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3B69D8A61FAEEB3F003FC2F3 /* CGFloat+Extension.swift */; };
 		3BABAD311FAC1342002324F9 /* ImageConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BABAD301FAC1342002324F9 /* ImageConstants.swift */; };
 		3BABAD331FAC19B0002324F9 /* BabyFlapped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BABAD321FAC19B0002324F9 /* BabyFlapped.swift */; };
 /* End PBXBuildFile section */
@@ -67,6 +68,7 @@
 		3B34144E1FAC0EA500584759 /* TitleScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleScene.swift; sourceTree = "<group>"; };
 		3B69D8A21FAE867E003FC2F3 /* CGPoint+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGPoint+Extension.swift"; sourceTree = "<group>"; };
 		3B69D8A41FAED3D4003FC2F3 /* SKNode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKNode+Extension.swift"; sourceTree = "<group>"; };
+		3B69D8A61FAEEB3F003FC2F3 /* CGFloat+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "CGFloat+Extension.swift"; sourceTree = "<group>"; };
 		3BABAD301FAC1342002324F9 /* ImageConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConstants.swift; sourceTree = "<group>"; };
 		3BABAD321FAC19B0002324F9 /* BabyFlapped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyFlapped.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -178,6 +180,7 @@
 				3BABAD301FAC1342002324F9 /* ImageConstants.swift */,
 				3B69D8A21FAE867E003FC2F3 /* CGPoint+Extension.swift */,
 				3B69D8A41FAED3D4003FC2F3 /* SKNode+Extension.swift */,
+				3B69D8A61FAEEB3F003FC2F3 /* CGFloat+Extension.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -319,6 +322,7 @@
 			files = (
 				3B3414171FAC0B7C00584759 /* GameScene.swift in Sources */,
 				3B69D8A31FAE867E003FC2F3 /* CGPoint+Extension.swift in Sources */,
+				3B69D8A71FAEEB3F003FC2F3 /* CGFloat+Extension.swift in Sources */,
 				3BABAD311FAC1342002324F9 /* ImageConstants.swift in Sources */,
 				3B3414191FAC0B7C00584759 /* GameViewController.swift in Sources */,
 				3B34144A1FAC0D4300584759 /* Enemy.swift in Sources */,
