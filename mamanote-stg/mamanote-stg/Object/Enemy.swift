@@ -8,30 +8,31 @@
 
 import SpriteKit
 
-class Enemy {
+class Enemy: SKSpriteNode {
     static let NAME = String(describing: Enemy.self)
 
-    private(set) var node: SKSpriteNode
-    private var direction: CGPoint
-    private var speed: CGFloat
+    private var velocity: CGPoint
 
     init(at position: CGPoint, to direction: CGPoint, speed: CGFloat) {
-        node = SKSpriteNode(imageNamed: ImageConstants.enemy)
-        node.name = Enemy.NAME
-        node.position = position
-        self.direction = direction
-        self.speed = speed
+        velocity = direction * speed
+        let initTexture = SKTexture(imageNamed: ImageConstants.enemy)
+        super.init(texture: initTexture, color: .white, size: initTexture.size())
+        name = Enemy.NAME
+        self.position = position
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     ///FIXME: 毎フレEnemyだけ探索して移動させる のと 範囲用のSquare周りに4つ置いて当たり判定で反転させるのとどっちが良い?.
     func move(area: CGRect) {
-        let velocity: CGPoint = direction * speed
-        node.position += velocity
-        if node.position.x <= area.minX || node.position.x >= area.maxX {
-            direction.x *= -1
+        position += velocity
+        if position.x <= area.minX || position.x >= area.maxX {
+            velocity.x *= -1
         }
-        if node.position.y <= area.minY || node.position.y >= area.maxY {
-            direction.y *= -1
+        if position.y <= area.minY || position.y >= area.maxY {
+            velocity.y *= -1
         }
     }
 }

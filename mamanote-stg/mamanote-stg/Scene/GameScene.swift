@@ -33,9 +33,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         physicsWorld.contactDelegate = self
 
         baby = Baby(x: frame.midX, y: frame.midY*1.6)
-        addChild((baby?.node)!)
+        addChild(baby!)
         myCharacter = MyCharacter(x: frame.midX, y: frame.midY*0.1)
-        addChild((myCharacter?.node)!)
+        addChild(myCharacter!)
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {

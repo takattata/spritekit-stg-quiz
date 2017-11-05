@@ -8,29 +8,32 @@
 
 import SpriteKit
 
-class Baby {
+class Baby: SKSpriteNode {
     static let NAME = String(describing: Baby.self)
     private let MAX_HP = 200
 
-    private(set) var node: SKSpriteNode
     private var textures: [SKTexture] = []
     private var hp = 0
 
     init(x: CGFloat, y: CGFloat) {
-        ///FIXME: ...
-        node = SKSpriteNode(imageNamed: ImageConstants.baby(0))
-        node.name = Baby.NAME
+        let initTexture = SKTexture(imageNamed: ImageConstants.baby(0))
+        super.init(texture: initTexture, color: .white, size: initTexture.size())
+        name = Baby.NAME
         ImageConstants.babies.forEach { imageName in
             textures.append(SKTexture(imageNamed: imageName))
         }
-        node.setScale(0.5)
-        node.position = CGPoint(x: x, y: y)
+        setScale(0.5)
+        position = CGPoint(x: x, y: y)
 
-        node.physicsBody = SKPhysicsBody(rectangleOf: node.size)
-        node.physicsBody?.isDynamic = true
-        node.physicsBody?.categoryBitMask = PhysicsCategory.Baby
-        node.physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
-        node.physicsBody?.collisionBitMask = PhysicsCategory.None
+        physicsBody = SKPhysicsBody(rectangleOf: size)
+        physicsBody?.isDynamic = true
+        physicsBody?.categoryBitMask = PhysicsCategory.Baby
+        physicsBody?.contactTestBitMask = PhysicsCategory.Bullet
+        physicsBody?.collisionBitMask = PhysicsCategory.None
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     // RETURN: clear?.
@@ -43,7 +46,7 @@ class Baby {
 
         let status = babyStatus()
         if preStatus != status {
-            node.texture = textures[status]
+            texture = textures[status]
         }
         return false
     }

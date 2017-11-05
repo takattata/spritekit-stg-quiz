@@ -8,24 +8,27 @@
 
 import SpriteKit
 
-class MyCharacter {
+class MyCharacter: SKSpriteNode {
     static let NAME = String(describing: MyCharacter.self)
     private let vx = 8.0
 
-    private(set) var node: SKSpriteNode
-
     init(x: CGFloat, y: CGFloat) {
-        node = SKSpriteNode(imageNamed: ImageConstants.myCharacter)
-        node.name = MyCharacter.NAME
-        node.position = CGPoint(x: x, y: y)
+        let initTexture = SKTexture(imageNamed: ImageConstants.myCharacter)
+        super.init(texture: initTexture, color: .white, size: initTexture.size())
+        name = MyCharacter.NAME
+        position = CGPoint(x: x, y: y)
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 
     func moveX(to destination: CGFloat) {
-        let distance = CGFloat(node.position.x < destination ? vx : -1*vx)
-        node.position.x += distance
+        let distance = CGFloat(position.x < destination ? vx : -1*vx)
+        position.x += distance
     }
 
     func attack(maxY: CGFloat) -> SKSpriteNode {
-        return Bullet(at: node.position, maxY: maxY).node
+        return Bullet(at: position, maxY: maxY)
     }
 }

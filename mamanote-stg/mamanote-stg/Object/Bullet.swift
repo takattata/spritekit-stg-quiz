@@ -8,24 +8,27 @@
 
 import SpriteKit
 
-class Bullet {
+class Bullet: SKSpriteNode {
     static let NAME = String(describing: Bullet.self)
 
-    private(set) var node: SKSpriteNode
-
     init(at position: CGPoint, maxY: CGFloat) {
-        node = SKSpriteNode(imageNamed: ImageConstants.heart)
-        node.name = Bullet.NAME
-        node.position = position
+        let initTexture = SKTexture(imageNamed: ImageConstants.heart)
+        super.init(texture: initTexture, color: .white, size: initTexture.size())
+        name = Bullet.NAME
+        self.position = position
         let actionMove = SKAction.move(to: CGPoint(x: position.x, y: position.y + maxY), duration: 4.0)
         let actionMoveDone = SKAction.removeFromParent()
-        node.run(SKAction.sequence([actionMove, actionMoveDone]))
+        run(SKAction.sequence([actionMove, actionMoveDone]))
 
-        node.physicsBody = SKPhysicsBody(circleOfRadius: node.size.width*0.4)
-        node.physicsBody?.isDynamic = true
-        node.physicsBody?.categoryBitMask = PhysicsCategory.Bullet
-        node.physicsBody?.contactTestBitMask = PhysicsCategory.Baby | PhysicsCategory.Enemy
-        node.physicsBody?.collisionBitMask = PhysicsCategory.None
-        node.physicsBody?.usesPreciseCollisionDetection = true
+        physicsBody = SKPhysicsBody(circleOfRadius: size.width*0.4)
+        physicsBody?.isDynamic = true
+        physicsBody?.categoryBitMask = PhysicsCategory.Bullet
+        physicsBody?.contactTestBitMask = PhysicsCategory.Baby | PhysicsCategory.Enemy
+        physicsBody?.collisionBitMask = PhysicsCategory.None
+        physicsBody?.usesPreciseCollisionDetection = true
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }
