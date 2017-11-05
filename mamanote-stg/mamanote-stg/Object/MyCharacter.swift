@@ -21,6 +21,8 @@ class MyCharacter: SKSpriteNode {
         super.init(texture: initTexture, color: .white, size: initTexture.size())
         name = MyCharacter.NAME
         position = CGPoint(x: x, y: y)
+        ///TEMP:
+        setScale(1.5)
 
         physicsBody = SKPhysicsBody(circleOfRadius: size.width*0.4)
         physicsBody?.isDynamic = true

@@ -7,7 +7,6 @@
 //
 
 import SpriteKit
-import GameplayKit
 
 struct PhysicsCategory {
     static let None: UInt32 = 0
@@ -23,38 +22,60 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     private var myCharacter: MyCharacter?
     private var touchLocation: CGPoint?
     private var enemyMoveArea: CGRect?
+    private var quizView: QuizView?
 
-    override func didMove(to view: SKView) {
+    override init(size: CGSize) {
+        super.init(size: size)
+
         backgroundColor = .white
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
+    }
 
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func didMove(to view: SKView) {
         baby = Baby(x: frame.midX, y: frame.midY*1.6)
         addChild(baby!)
         myCharacter = MyCharacter(x: frame.midX, y: frame.midY*0.1)
         addChild(myCharacter!)
-        run(SKAction.repeatForever(
-            SKAction.sequence([
-                SKAction.run(addEnemy),
-                SKAction.wait(forDuration: 3.0)
-                ])),
-            withKey: Enemy.ADD_ENEMY_ACTION)
-        ///FIXME: 視認用.
         let enemyMoveAreaTop = (baby?.size.height)!
         let enemyMoveAreaHeight = size.height-enemyMoveAreaTop
         enemyMoveArea = CGRect(x: 0, y: 0, width: size.width, height: enemyMoveAreaHeight)
-        let shapeNode = SKShapeNode(rect: enemyMoveArea!)
-        shapeNode.fillColor = UIColor.blue.withAlphaComponent(0.3)
-        addChild(shapeNode)
+        run(SKAction.repeatForever(
+            SKAction.sequence([SKAction.run(addEnemy), SKAction.wait(forDuration: 3.0)])
+        ), withKey: Enemy.ADD_ENEMY_ACTION)
+        quizView = QuizView(size: size)
+        addChild(quizView!)
+        quizView?.isHidden = true
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
+
         touchLocation = touch.location(in: self)
+        ///TEST:
+        if (quizView?.isHidden)! {
+            quizView?.isHidden = false
+            quizView?.show()
+            if let action = action(forKey: Enemy.ADD_ENEMY_ACTION) {
+                action.speed = 0.0
+            }
+        } else {
+            quizView?.hide() { [weak self] in
+                self?.quizView?.isHidden = true
+                if let action = self?.action(forKey: Enemy.ADD_ENEMY_ACTION) {
+                    action.speed = 1.0
+                }
+            }
+        }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
+
         touchLocation = touch.location(in: self)
     }
 
@@ -63,15 +84,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func update(_ currentTime: TimeInterval) {
-        ///NOTE: touchesMovedだと止まったままタップしている時に途中で認識されなくなった.
-//        if let myCharacter = myCharacter, isTapping {
-//            attackLimitCounter += 1
-//            myCharacter.moveX(to: touchLocation.x)
-//            if attackLimitCounter >= ATTACK_LIMIT {
-//                addChild(myCharacter.attack(maxY: size.height))
-//                attackLimitCounter = 0
-//            }
-//        }
+        if (quizView?.isHidden)! == false { return }
+
         if let myCharacter = myCharacter {
             myCharacter.update(with: self, tap: touchLocation)
         }

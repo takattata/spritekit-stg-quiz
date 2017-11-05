@@ -10,11 +10,18 @@ import SpriteKit
 import UIKit
 
 class TitleScene: SKScene {
-    private var label: SKLabelNode = SKLabelNode(text: "タップしてスタート！")
+    override init(size: CGSize) {
+        super.init(size: size)
+
+        scaleMode = .aspectFill
+        backgroundColor = .white
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 
     override func didMove(to view: SKView) {
-        backgroundColor = .white
-
         let babyTextures = [SKTexture(imageNamed: ImageConstants.babyClose), SKTexture(imageNamed: ImageConstants.babyOpen)]
         let babyNode = SKSpriteNode(texture: babyTextures.first)
         babyNode.position = CGPoint(x: frame.midX, y: frame.midY*1.2)
@@ -22,7 +29,7 @@ class TitleScene: SKScene {
         let animation = SKAction.animate(with: babyTextures, timePerFrame: 0.5)
         babyNode.run(SKAction.repeatForever(animation))
         addChild(babyNode)
-
+        let label = SKLabelNode(text: "タップしてスタート！")
         label.fontColor = .red
         label.fontSize = 30.0
         label.position = CGPoint(x: frame.midX, y: frame.midY*0.5)
