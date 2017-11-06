@@ -17,6 +17,10 @@ struct PhysicsCategory {
     static let MyCharacter: UInt32 = 0b1000
 }
 
+protocol GameView {
+    func hideQuiz()
+}
+
 class GameScene: SKScene, SKPhysicsContactDelegate {
     private var baby: Baby?
     private var myCharacter: MyCharacter?
@@ -47,7 +51,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.repeatForever(
             SKAction.sequence([SKAction.run(addEnemy), SKAction.wait(forDuration: 3.0)])
         ), withKey: Enemy.ADD_ENEMY_ACTION)
-        quizView = QuizView(size: size)
+        quizView = QuizView(with: self)
         addChild(quizView!)
         quizView?.isHidden = true
     }
@@ -62,13 +66,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             quizView?.show()
             if let action = action(forKey: Enemy.ADD_ENEMY_ACTION) {
                 action.speed = 0.0
-            }
-        } else {
-            quizView?.hide() { [weak self] in
-                self?.quizView?.isHidden = true
-                if let action = self?.action(forKey: Enemy.ADD_ENEMY_ACTION) {
-                    action.speed = 1.0
-                }
             }
         }
     }
@@ -155,5 +152,14 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let respawnAt = CGPoint(x: respawnX, y: CGFloat.random(min: 0, max: enemyMoveArea.size.height))
         let enemy = Enemy(at: respawnAt, to: direction, speed: CGFloat.random(min: 1.0, max: 4.0))
         addChild(enemy)
+    }
+}
+
+extension GameScene: GameView {
+    func hideQuiz() {
+        quizView?.isHidden = true
+        if let action = action(forKey: Enemy.ADD_ENEMY_ACTION) {
+            action.speed = 1.0
+        }
     }
 }

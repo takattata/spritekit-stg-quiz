@@ -27,6 +27,8 @@
 		3BABAD311FAC1342002324F9 /* ImageConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BABAD301FAC1342002324F9 /* ImageConstants.swift */; };
 		3BABAD331FAC19B0002324F9 /* BabyFlapped.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BABAD321FAC19B0002324F9 /* BabyFlapped.swift */; };
 		3BE25E4E1FAF81970035B0C3 /* QuizView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE25E4D1FAF81970035B0C3 /* QuizView.swift */; };
+		3BE25E521FAFD4240035B0C3 /* quiz.csv in Resources */ = {isa = PBXBuildFile; fileRef = 3BE25E511FAFD4240035B0C3 /* quiz.csv */; };
+		3BE25E541FAFD64C0035B0C3 /* Int+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3BE25E531FAFD64C0035B0C3 /* Int+Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,6 +75,8 @@
 		3BABAD301FAC1342002324F9 /* ImageConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageConstants.swift; sourceTree = "<group>"; };
 		3BABAD321FAC19B0002324F9 /* BabyFlapped.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BabyFlapped.swift; sourceTree = "<group>"; };
 		3BE25E4D1FAF81970035B0C3 /* QuizView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuizView.swift; sourceTree = "<group>"; };
+		3BE25E511FAFD4240035B0C3 /* quiz.csv */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = quiz.csv; sourceTree = "<group>"; };
+		3BE25E531FAFD64C0035B0C3 /* Int+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Int+Extension.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,7 @@
 				3B3414101FAC0B7C00584759 /* AppDelegate.swift */,
 				3B3414141FAC0B7C00584759 /* Actions.sks */,
 				3B3414181FAC0B7C00584759 /* GameViewController.swift */,
+				3BE25E511FAFD4240035B0C3 /* quiz.csv */,
 				3B34141A1FAC0B7C00584759 /* Main.storyboard */,
 				3B34141D1FAC0B7C00584759 /* Assets.xcassets */,
 				3B34141F1FAC0B7C00584759 /* LaunchScreen.storyboard */,
@@ -184,6 +189,7 @@
 				3B69D8A21FAE867E003FC2F3 /* CGPoint+Extension.swift */,
 				3B69D8A41FAED3D4003FC2F3 /* SKNode+Extension.swift */,
 				3B69D8A61FAEEB3F003FC2F3 /* CGFloat+Extension.swift */,
+				3BE25E531FAFD64C0035B0C3 /* Int+Extension.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -297,6 +303,7 @@
 			files = (
 				3B34141C1FAC0B7C00584759 /* Main.storyboard in Resources */,
 				3B34141E1FAC0B7C00584759 /* Assets.xcassets in Resources */,
+				3BE25E521FAFD4240035B0C3 /* quiz.csv in Resources */,
 				3B3414211FAC0B7C00584759 /* LaunchScreen.storyboard in Resources */,
 				3B3414151FAC0B7C00584759 /* Actions.sks in Resources */,
 			);
@@ -323,6 +330,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3BE25E541FAFD64C0035B0C3 /* Int+Extension.swift in Sources */,
 				3B3414171FAC0B7C00584759 /* GameScene.swift in Sources */,
 				3B69D8A31FAE867E003FC2F3 /* CGPoint+Extension.swift in Sources */,
 				3B69D8A71FAEEB3F003FC2F3 /* CGFloat+Extension.swift in Sources */,
