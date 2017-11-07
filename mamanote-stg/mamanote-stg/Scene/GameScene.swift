@@ -22,11 +22,21 @@ protocol GameView {
 }
 
 class GameScene: SKScene, SKPhysicsContactDelegate {
+    enum Depth: CGFloat {
+        case Timer = 100
+    }
+
+    private let gameTime = 8.0
+    private let quizMaxCount = 3
     private var baby: Baby?
     private var myCharacter: MyCharacter?
     private var touchLocation: CGPoint?
     private var enemyMoveArea: CGRect?
     private var quizView: QuizView?
+    private var timerNode = SKLabelNode(text: "--:--")
+    private var timeRemaining: TimeInterval = 0.0
+    private var preTime: TimeInterval = 0.0
+    private var quizCount = 0
 
     override init(size: CGSize) {
         super.init(size: size)
@@ -34,6 +44,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         backgroundColor = .white
         physicsWorld.gravity = .zero
         physicsWorld.contactDelegate = self
+        timerNode.zPosition = Depth.Timer.rawValue
+        timerNode.fontColor = .red
+        timerNode.horizontalAlignmentMode = .center
+        timerNode.position = CGPoint(x: size.width-timerNode.frame.width*2, y: size.height-timerNode.frame.height*2)
+        addChild(timerNode)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -41,6 +56,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func didMove(to view: SKView) {
+        timeRemaining = gameTime
         baby = Baby(x: frame.midX, y: frame.midY*1.6)
         addChild(baby!)
         myCharacter = MyCharacter(x: frame.midX, y: frame.midY*0.1)
@@ -51,23 +67,16 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         run(SKAction.repeatForever(
             SKAction.sequence([SKAction.run(addEnemy), SKAction.wait(forDuration: 3.0)])
         ), withKey: Enemy.ADD_ENEMY_ACTION)
-        quizView = QuizView(with: self)
+        quizView = QuizView(size: size)
         addChild(quizView!)
         quizView?.isHidden = true
+        quizView?.delegate = self
     }
 
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         guard let touch = touches.first else { return }
 
         touchLocation = touch.location(in: self)
-        ///TEST:
-        if (quizView?.isHidden)! {
-            quizView?.isHidden = false
-            quizView?.show()
-            if let action = action(forKey: Enemy.ADD_ENEMY_ACTION) {
-                action.speed = 0.0
-            }
-        }
     }
 
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -81,7 +90,26 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
 
     override func update(_ currentTime: TimeInterval) {
+        if preTime > 0 {
+            timeRemaining -= (currentTime - preTime)
+        }
+        preTime = currentTime
+        timerNode.text = timeRemaining.string()
+        if (timeRemaining <= 0) {
+            let scene = ResultScene(size: size, babyIndex: (baby?.currentStatus())!)
+            scene.scaleMode = .aspectFill
+            view?.presentScene(scene, transition: .moveIn(with: .down, duration: 1.0))
+        }
         if (quizView?.isHidden)! == false { return }
+
+        if canStartQuiz() {
+            quizCount += 1
+            quizView?.isHidden = false
+            quizView?.show()
+            if let action = action(forKey: Enemy.ADD_ENEMY_ACTION) {
+                action.speed = 0.0
+            }
+        }
 
         if let myCharacter = myCharacter {
             myCharacter.update(with: self, tap: touchLocation)
@@ -152,6 +180,18 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let respawnAt = CGPoint(x: respawnX, y: CGFloat.random(min: 0, max: enemyMoveArea.size.height))
         let enemy = Enemy(at: respawnAt, to: direction, speed: CGFloat.random(min: 1.0, max: 4.0))
         addChild(enemy)
+    }
+
+    private func canStartQuiz() -> Bool {
+        let timeCondition = gameTime/4
+        let percentage = 25.0
+        for i in (0..<quizMaxCount) {
+            let value = Double(i) + 1.0
+            if quizCount == i && ((baby?.hpPercentage())! >= (percentage*value) || timeRemaining <= timeCondition*Double(quizMaxCount-i)) {
+                return true
+            }
+        }
+        return false
     }
 }
 

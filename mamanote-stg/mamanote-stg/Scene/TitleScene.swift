@@ -39,7 +39,7 @@ class TitleScene: SKScene {
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         let scene = GameScene(size: frame.size)
         scene.scaleMode = .aspectFill
-        view?.presentScene(scene)
+        view?.presentScene(scene, transition: .crossFade(withDuration: 0.5))
     }
 
     override func update(_ currentTime: TimeInterval) {

@@ -7,12 +7,11 @@
 //
 
 import SpriteKit
-import UIKit
 
 struct Quiz {
     var text: String
     var answer: [String]
-    var correct: String
+    var correct: Int
 }
 
 class QuizView: SKNode {
@@ -22,27 +21,28 @@ class QuizView: SKNode {
         static let names = ["correct", "incorrect"]
     }
     enum Depth: CGFloat {
-        case View = 100
-        case Text = 101
-        case Result = 102
+        case View = 10
+        case Text = 11
+        case Button = 12
+        case Result = 13
     }
 
     private let buttonNum = 3
 
-    private var delegate: GameView?
+    var delegate: GameView?
     private var view: SKShapeNode
     private var resultSprites: [SKSpriteNode] = []
     private var textLabel = SKLabelNode(text: "")
-    private var buttons: [UIButton] = []
+    private var buttons: [Button] = []
     private var quiz: [Quiz] = []
     private var nowQuiz: Quiz?
     private var unselectedQuizIndex: [Int] = []
+    private var validInput = true
 
-    init(with scene: SKScene) {
-        view = SKShapeNode(rect: CGRect(x: 0, y: 0, width: scene.size.width, height: scene.size.height))
+    init(size: CGSize) {
+        view = SKShapeNode(rect: CGRect(x: 0, y: 0, width: size.width, height: size.height))
         super.init()
 
-        delegate = scene as? GameView
         load()
         for i in (0..<quiz.count) {
             unselectedQuizIndex.append(i)
@@ -57,9 +57,8 @@ class QuizView: SKNode {
         addChild(textLabel)
         Result.names.forEach { resultSprites.append(createResult(name: $0)) }
         for i in (0..<buttonNum) {
-            buttons.append(createButton(on: scene, at: i))
+            buttons.append(createButton(at: i))
         }
-        setButtonStatus(enabled: false)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -68,33 +67,29 @@ class QuizView: SKNode {
 
     func show() {
         let selectIndex = Int.random(range: 0..<unselectedQuizIndex.count)
-        nowQuiz = quiz[unselectedQuizIndex[selectIndex]]
-        textLabel.text = nowQuiz?.text
+        let target = quiz[unselectedQuizIndex[selectIndex]]
+        textLabel.text = target.text
         for i in (0..<buttonNum) {
-            buttons[i].setTitle(nowQuiz?.answer[i], for: .normal)
+            buttons[i].setText(target.answer[i])
         }
+        nowQuiz = target
         unselectedQuizIndex.remove(at: selectIndex)
-        run(SKAction.fadeIn(withDuration: 0.25)) {
-            self.setButtonStatus(enabled: true)
-        }
+        run(SKAction.fadeIn(withDuration: 0.25))
     }
 
     func hide() {
-        setButtonStatus(enabled: false)
         run(SKAction.fadeOut(withDuration: 0.25)) {
+            self.validInput = true
             self.delegate?.hideQuiz()
         }
     }
 
-    private func createButton(on scene: SKScene, at index: Int) -> UIButton {
-        let button = UIButton(frame: CGRect(x: 0, y: 0, width: view.frame.width*0.7, height: view.frame.height*0.1))
-        button.backgroundColor = .white
-        button.setTitleColor(.black, for: .normal)
-        button.setTitleColor(.red, for: .highlighted)
+    private func createButton(at index: Int) -> Button {
         let distance = view.frame.height/6
-        button.layer.position = CGPoint(x: view.frame.midX, y: view.frame.height-distance*(index+1))
-        button.addTarget(self, action: #selector(QuizView.onTapButton), for: .touchUpInside)
-        scene.view?.addSubview(button)
+        let button = Button(at: CGPoint(x: view.frame.midX, y: distance*(index+1)), name: index.description, size: CGSize(width: view.frame.width*0.7, height: view.frame.height*0.1))
+        button.zPosition = Depth.Button.rawValue
+        button.tappedDelegate = self
+        addChild(button)
         return button
     }
 
@@ -103,26 +98,6 @@ class QuizView: SKNode {
         sprite.position = CGPoint(x: view.frame.midX, y: view.frame.midY)
         sprite.zPosition = Depth.Result.rawValue
         return sprite
-    }
-
-    private func setButtonStatus(enabled: Bool) {
-        buttons.forEach { button in
-            button.isHidden = !enabled
-            button.isEnabled = enabled
-        }
-    }
-
-    @objc private func onTapButton(_ sender: UIButton) {
-        let index = sender.title(for: .normal) == nowQuiz?.correct ? Result.Correct.rawValue : Result.Incorrect.rawValue
-        let sprite = resultSprites[index]
-        addChild(sprite)
-        let action = SKAction.sequence([
-                        SKAction.fadeIn(withDuration: 0.4),
-                        SKAction.wait(forDuration: 0.7),
-                        SKAction.run(self.hide),
-                        SKAction.removeFromParent()
-                      ])
-        sprite.run(action)
     }
 
     private func load() {
@@ -134,11 +109,34 @@ class QuizView: SKNode {
                     if line.isEmpty { return }
                     let lineArray = line.components(separatedBy: CharacterSet(charactersIn: ","))
                     let answers = [lineArray[1], lineArray[2], lineArray[3]]
-                    quiz.append(Quiz(text: lineArray[0], answer: answers, correct: lineArray[4]))
+                    var correctIndex = -1
+                    for (i, answer) in answers.enumerated() {
+                        if answer == lineArray[4] {
+                            correctIndex = i
+                        }
+                    }
+                    quiz.append(Quiz(text: lineArray[0], answer: answers, correct: correctIndex))
                 }
             } catch let error as NSError {
                 print(error.localizedDescription)
             }
         }
+    }
+}
+
+extension QuizView: ButtonTappedDelegate {
+    func tapped(_ name: String) {
+        guard validInput else { return }
+        let index = name == nowQuiz?.correct.description ? Result.Correct.rawValue : Result.Incorrect.rawValue
+        let sprite = resultSprites[index]
+        addChild(sprite)
+        let action = SKAction.sequence([
+            SKAction.fadeIn(withDuration: 0.2),
+            SKAction.wait(forDuration: 0.5),
+            SKAction.run(self.hide),
+            SKAction.removeFromParent()
+            ])
+        validInput = false
+        sprite.run(action)
     }
 }

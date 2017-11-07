@@ -38,20 +38,25 @@ class Baby: SKSpriteNode {
 
     // RETURN: clear?.
     func recover() -> Bool {
-        let preStatus = babyStatus()
+        let preStatus = currentStatus()
         hp += 1
         if hp >= MAX_HP {
             return true
         }
 
-        let status = babyStatus()
+        let status = currentStatus()
         if preStatus != status {
             texture = textures[status]
         }
         return false
     }
 
-    private func babyStatus() -> Int {
+    func hpPercentage() -> Double {
+        print(">>> hpPercentage: hp[\(hp.description)], Double(\((Double(hp) / Double(MAX_HP)).description))")
+        return Double(hp) / Double(MAX_HP) * 100.0
+    }
+
+    func currentStatus() -> Int {
         return hp / (MAX_HP / ImageConstants.babyCount)
     }
 }
